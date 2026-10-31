@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CollectManager</title>
+  <script>
+    let lang;
+    try { lang = localStorage.getItem('lang'); } catch (e) {}
+    if (!lang) lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+    location.replace(lang + '/');
+  </script>
+</head>
+<body></body>
+</html>
