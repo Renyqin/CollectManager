@@ -2,11 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CollectManager</title>
+  <title>Collect Manager</title>
   <script>
-    let lang;
+    var lang;
     try { lang = localStorage.getItem('lang'); } catch (e) {}
-    if (!lang) lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+    if (!lang) {
+      var nav = (navigator.language || '').toLowerCase();
+      if (nav.indexOf('zh') === 0) {
+        // zh-TW、zh-HK、zh-MO、zh-Hant → 繁体；其余中文 → 简体
+        lang = /hant|tw|hk|mo/.test(nav) ? 'zh-hant' : 'zh';
+      } else {
+        lang = 'en';
+      }
+    }
     location.replace(lang + '/');
   </script>
 </head>

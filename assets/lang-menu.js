@@ -7,16 +7,22 @@
  *
  * 脚本会根据 <html lang="..."> 判断当前语言，
  * 并自动链接到另一种语言文件夹下的同名页面。
- * 要加新语言：在 LANGS 里加一行，再建对应的文件夹。
+ * 要加新语言：在 LANGS 里加一行（code 必须和文件夹名一致），再建对应的文件夹。
  */
 (function () {
   var LANGS = [
-    { code: 'zh', label: '简体中文' },
-    { code: 'en', label: 'English' }
+    { code: 'zh',      lang: 'zh-hans', label: '简体中文' },
+    { code: 'zh-hant', lang: 'zh-hant', label: '繁體中文' },
+    { code: 'en',      lang: 'en',      label: 'English' }
   ];
 
+  // 按 <html lang> 匹配当前语言；取匹配最长的一项，避免 zh-Hant 被识别成 zh
   var htmlLang = (document.documentElement.lang || '').toLowerCase();
-  var current = LANGS.find(function (l) { return htmlLang.indexOf(l.code) === 0; }) || LANGS[0];
+  var current = null;
+  LANGS.forEach(function (l) {
+    if (htmlLang.indexOf(l.lang) === 0 && (!current || l.lang.length > current.lang.length)) current = l;
+  });
+  if (!current) current = LANGS[0];
 
   // 当前文件名，如 privacy.html；访问文件夹时为空字符串
   var file = location.pathname.split('/').pop();
